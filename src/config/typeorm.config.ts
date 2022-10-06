@@ -1,15 +1,12 @@
 /* eslint-disable prettier/prettier */
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import {
-  TypeOrmModuleAsyncOptions,
-  TypeOrmModuleOptions,
-} from '@nestjs/typeorm';
-import { Details } from '../bordingDetails/entity/details.entity';
+import { TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
+import { Details } from 'src/bordingDetails/entity/details.entity';
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
   imports: [ConfigModule],
   inject: [ConfigService],
-  useFactory: async (): Promise<TypeOrmModuleOptions> => {
+  useFactory: async () => {
     return {
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -18,7 +15,11 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
       database: process.env.DB_DATABASE,
       password: process.env.DB_PASSWORD,
       entities: [Details],
-      synchronize: true,
+      migrations: [__dirname + '/../migrations/*{.ts,.js}'],
+      extra: {
+        charset: 'utf8mb4_unicode_ci',
+      },
+      synchronize: false,
     };
   },
 };

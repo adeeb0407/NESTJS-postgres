@@ -3,7 +3,7 @@ import { IsOptional } from 'class-validator';
 
 export class UpdateDetailsDto {
   @IsOptional()
-  name: string;
+  name?: string;
 
   @IsOptional() // class-validator (pipes)
   website?: string;

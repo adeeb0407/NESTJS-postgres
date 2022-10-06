@@ -3,7 +3,7 @@
 export class CreateDetailsDto {
   id: string | number;
 
-  name: string;
+  name?: string;
 
   website?: string;
 

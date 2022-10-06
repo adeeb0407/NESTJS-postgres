@@ -2,7 +2,8 @@ import { Module } from '@nestjs/common';
 import { DetailsModule } from './bordingDetails/details.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Details } from './bordingDetails/entity/details.entity';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
+import { typeOrmAsyncConfig } from './config/typeorm.config';
 
 @Module({
   imports: [
@@ -10,21 +11,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       envFilePath: [`.env.dev`],
     }),
     DetailsModule,
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        type: 'postgres',
-        entities: [Details],
-        // autoLoadEntities: true,
-        synchronize: true,
-        host: configService.get('DB_HOST'),
-        port: configService.get('DB_PORT'),
-        username: configService.get('DB_USERNAME'),
-        password: configService.get('DB_PASSWORD'),
-        database: configService.get('DB_DATABASE'),
-      }),
-    }),
+    TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
   ],
 })
 export class AppModule {}
